@@ -1,0 +1,11 @@
+{
+    "name": "smart-chat-hub",
+    "version": "1.0.0",
+    "scripts": {
+      "install:all": "yarn --cwd client && yarn --cwd server",
+      "start:all": "yarn --cwd client start && yarn --cwd server start",
+      "lint:all": "yarn --cwd client lint && yarn --cwd server lint",
+      "format:all": "yarn --cwd client format && yarn --cwd server format",
+      "test:all": "yarn --cwd client test && yarn --cwd server test"
+    }
+  }
