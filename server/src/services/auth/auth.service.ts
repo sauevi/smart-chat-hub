@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { NewUser, User, UsersService } from '../users/users.service'
+import { UsersService } from '../users/users.service'
 import { JwtService } from '@nestjs/jwt'
+import { CreateUserDto } from 'src/database/users/dto/create-user.dto'
+import { User } from '../users/user.entity'
 
 @Injectable()
 export class AuthService {
@@ -22,7 +24,7 @@ export class AuthService {
     }
   }
 
-  async signIn(user: User): Promise<NewUser> {
+  async signIn(user: CreateUserDto): Promise<User> {
     return await this.usersService.create(user)
   }
 }

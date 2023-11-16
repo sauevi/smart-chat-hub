@@ -1,48 +1,24 @@
 import { Injectable } from '@nestjs/common'
-
-export type User = {
-  username: string
-  password: string
-}
-
-export type NewUser = {
-  userId: number
-  username: string
-  password: string
-}
+import { InjectRepository } from '@nestjs/typeorm'
+import { User } from './user.entity'
+import { Repository } from 'typeorm'
+import { CreateUserDto } from 'src/database/users/dto/create-user.dto'
 
 @Injectable()
 export class UsersService {
-  private readonly users = [
-    {
-      userId: 1,
-      username: 'sau',
-      password: 'pass',
-    },
-    {
-      userId: 2,
-      username: 'rox',
-      password: 'pass',
-    },
-  ]
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
 
-  async findOne(username: string): Promise<User | undefined> {
-    return this.users.find((user) => user.username === username)
+  findOne(userName: string): Promise<User> {
+    return this.usersRepository.findOneBy({ userName })
   }
 
-  async create(user: User): Promise<NewUser> {
-    const oldUser = await this.findOne(user.username)
+  async create(createUserDto: CreateUserDto): Promise<User> {
+    const user = new User()
+    user.userName = createUserDto.userName
+    user.password = createUserDto.password
 
-    if (oldUser) {
-      throw new Error('User already exists')
-    }
-
-    const newUser = {
-      userId: this.users.length + 1,
-      ...user,
-    }
-
-    this.users.push(newUser)
-    return newUser
+    return this.usersRepository.save(user)
   }
 }
