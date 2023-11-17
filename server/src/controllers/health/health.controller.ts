@@ -1,18 +1,20 @@
 import { Controller, Get } from '@nestjs/common'
 import {
   HealthCheckService,
-  HttpHealthIndicator,
   HealthCheck,
   TypeOrmHealthIndicator,
+  DiskHealthIndicator,
+  MemoryHealthIndicator,
 } from '@nestjs/terminus'
 import { Public } from 'src/decorators/setMetadata.decorator'
 
 @Controller('health')
 export class HealthController {
   constructor(
-    private health: HealthCheckService,
-    private http: HttpHealthIndicator,
-    private db: TypeOrmHealthIndicator,
+    private readonly health: HealthCheckService,
+    private readonly db: TypeOrmHealthIndicator,
+    private readonly memory: MemoryHealthIndicator,
+    private readonly disk: DiskHealthIndicator,
   ) {}
 
   @Get()
@@ -20,17 +22,11 @@ export class HealthController {
   @Public()
   checkLogIn() {
     return this.health.check([
-      () => this.http.pingCheck('auth', 'http://localhost:8000/auth/log-in'),
-      () => this.http.pingCheck('auth', 'http://localhost:8000/auth/sign-in'),
-    ])
-  }
-
-  @Get('data-base')
-  @HealthCheck()
-  @Public()
-  checkDataBase() {
-    return this.health.check([
-      () => this.db.pingCheck(process.env.DATA_BASE_NAME),
+      () => this.db.pingCheck(process.env.DB_DATABASE, { timeout: 300 }),
+      () => this.memory.checkHeap('memory_heap', 150 * 1024 * 1024),
+      () => this.memory.checkRSS('memory_rss', 150 * 1024 * 1024),
+      () =>
+        this.disk.checkStorage('storage', { path: '/', thresholdPercent: 0.8 }),
     ])
   }
 }
