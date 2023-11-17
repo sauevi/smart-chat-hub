@@ -3,7 +3,7 @@ import { LocalAuthGuard } from '../../guard/local-auth.guard'
 import { AuthService } from '../../services/auth/auth.service'
 import { Public } from 'src/decorators/setMetadata.decorator'
 import { CreateUserDto } from 'src/database/users/dto/create-user.dto'
-import { User } from 'src/services/users/user.entity'
+import { NewUser } from 'src/services/users/users.service'
 
 @Controller('auth')
 export class AuthController {
@@ -18,7 +18,7 @@ export class AuthController {
 
   @Post('sign-in')
   @Public()
-  signIn(@Body() createUserDto: CreateUserDto): Promise<User> {
+  signIn(@Body() createUserDto: CreateUserDto): Promise<NewUser> {
     return this.authService.signIn(createUserDto)
   }
 }

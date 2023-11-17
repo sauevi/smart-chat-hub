@@ -19,7 +19,7 @@ async function bootstrap() {
   app.use(helmet())
   app.use(cookieParser())
 
-  await app.listen(8000)
+  await app.listen(parseInt(process.env.SERVER_PORT, 10))
 }
 
 bootstrap()

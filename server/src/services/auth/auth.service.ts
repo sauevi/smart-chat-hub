@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
-import { UsersService } from '../users/users.service'
+import { NewUser, UsersService } from '../users/users.service'
 import { JwtService } from '@nestjs/jwt'
 import { CreateUserDto } from 'src/database/users/dto/create-user.dto'
-import { User } from '../users/user.entity'
+import { User } from '../../database/users/entity/user.entity'
 import { compare } from './bcrypt'
 
 @Injectable()
@@ -29,7 +29,7 @@ export class AuthService {
     }
   }
 
-  async signIn(user: CreateUserDto): Promise<User> {
+  async signIn(user: CreateUserDto): Promise<NewUser> {
     return await this.usersService.create(user)
   }
 }
