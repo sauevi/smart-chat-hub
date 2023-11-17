@@ -1,3 +1,5 @@
 export const jwtConstants = {
-  secret: 'secret_key_for_jwt',
+  secret: process.env.JWT_SECRET,
 }
+
+export const SALT_OR_ROUNDS = 10

@@ -15,11 +15,11 @@ import { JwtAuthGuard } from 'src/guard/jwt-auth.guard'
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: '127.0.0.1',
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'test',
+      host: process.env.HOST_DB || '127.0.0.1',
+      port: Number(process.env.PORT_DB) || 3306,
+      username: process.env.USER_NAME_DB,
+      password: process.env.USER_PASSWORD_DB,
+      database: process.env.DATABASE_NAME,
       autoLoadEntities: true,
       synchronize: true,
     }),
